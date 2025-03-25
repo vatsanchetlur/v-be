@@ -1,7 +1,12 @@
 const express = require('express');
-const cors = require('cors');
 const app = express();
 const prompts = require('./data/prompts.json'); // Ensure this file exists
+
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'https://vatsanchetlur.github.io',
+}));
 
 require('dotenv').config();
 const { OpenAI } = require('openai');

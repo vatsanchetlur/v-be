@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 const prompts = require('./data/prompts.json'); // Ensure this file exists
 
-const cors = require('cors');
-
 app.use(cors({
   origin: 'https://vatsanchetlur.github.io',
 }));

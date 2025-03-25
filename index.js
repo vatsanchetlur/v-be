@@ -1,10 +1,7 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const prompts = require('./data/prompts.json'); // Ensure this file exists
-
-app.use(cors({
-  origin: 'https://vatsanchetlur.github.io',
-}));
 
 require('dotenv').config();
 const { OpenAI } = require('openai');
@@ -13,7 +10,11 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-app.use(cors());
+// ✅ CORS - Only allow frontend GitHub Pages domain
+app.use(cors({
+  origin: 'https://vatsanchetlur.github.io',
+}));
+
 app.use(express.json());
 
 // ✅ Test route
@@ -26,7 +27,7 @@ app.get('/api/prompts', (req, res) => {
   res.json(prompts);
 });
 
-// ✅ Helper: Validate GPT response
+// ✅ Helper: Validate GPT response format
 function isValidAgileResponse(data) {
   if (!data.epic || !data.epic.summary || !data.epic.description) return false;
   if (!Array.isArray(data.stories)) return false;
@@ -40,7 +41,7 @@ function isValidAgileResponse(data) {
   return true;
 }
 
-// ✅ Main GPT-only endpoint
+// ✅ Main GPT endpoint
 app.post('/api/generate-upload', async (req, res) => {
   const { persona, edge, projectKey, jiraUser, jiraLabel, prompt } = req.body;
 
